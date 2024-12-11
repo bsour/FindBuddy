@@ -1,36 +1,40 @@
-import { useState, useEffect } from 'react';
-import { socket } from '@/lib/socket';
+import { useState, useEffect } from "react";
+import { webRTCService } from "@/services/webRTC";
 
-interface LiveMetrics {
-  onlineUsers: number;
-  activeChats: number;
-  peakUsersToday: number;
+interface Metrics {
+  totalUsers: number;
+  activeUsers: number;
 }
 
 export const useOnlineUsers = () => {
-  const [metrics, setMetrics] = useState<LiveMetrics>({
-    onlineUsers: 1,
-    activeChats: 0,
-    peakUsersToday: 1
+  const [metrics, setMetrics] = useState<Metrics>({
+    totalUsers: 0,
+    activeUsers: 0,
   });
 
   useEffect(() => {
-    // When this user connects
-    socket.on('connect', () => {
-      // Emit that we have a new user
-      socket.emit('user:join');
-    });
+    const updateMetrics = () => {
+      const nearbyUsers = webRTCService.getNearbyUsers();
+      setMetrics({
+        totalUsers: nearbyUsers.length + 1, // +1 for current user
+        activeUsers: nearbyUsers.length + 1,
+      });
+    };
 
-    // Listen for users count updates
-    socket.on('metrics:update', (data: LiveMetrics) => {
-      setMetrics(data);
-    });
+    // Update metrics when peers connect/disconnect
+    window.addEventListener('peer-connected', updateMetrics);
+    window.addEventListener('peer-disconnected', updateMetrics);
 
-    // Cleanup listeners on unmount
+    // Initial metrics
+    updateMetrics();
+
+    // Periodic updates
+    const interval = setInterval(updateMetrics, 5000);
+
     return () => {
-      socket.off('connect');
-      socket.off('metrics:update');
-      socket.emit('user:leave');
+      window.removeEventListener('peer-connected', updateMetrics);
+      window.removeEventListener('peer-disconnected', updateMetrics);
+      clearInterval(interval);
     };
   }, []);
 
