@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState, Suspense, lazy } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface ContactModalProps {
@@ -6,7 +6,13 @@ interface ContactModalProps {
   onClose: () => void;
 }
 
+// Lazy load preview components
+const LinkedInPreview = lazy(() => import('./previews/LinkedInPreview'));
+const GitHubPreview = lazy(() => import('./previews/GitHubPreview'));
+
 export const ContactModal: FC<ContactModalProps> = ({ isOpen, onClose }) => {
+  const [activePreview, setActivePreview] = useState<'linkedin' | 'github' | null>(null);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -47,12 +53,14 @@ export const ContactModal: FC<ContactModalProps> = ({ isOpen, onClose }) => {
               </div>
               
               {/* Social Links */}
-              <div className="space-y-4">
+              <div className="space-y-4 relative">
                 <motion.a
                   href="https://linkedin.com/in/sourabhbeniwal1"
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ x: 4 }}
+                  onMouseEnter={() => setActivePreview('linkedin')}
+                  onMouseLeave={() => setActivePreview(null)}
                   className="flex items-center gap-3 p-4 bg-space-black/50 hover:bg-space-black rounded-xl transition-all duration-300 group border border-gray-700/50"
                 >
                   <motion.div
@@ -71,6 +79,8 @@ export const ContactModal: FC<ContactModalProps> = ({ isOpen, onClose }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ x: 4 }}
+                  onMouseEnter={() => setActivePreview('github')}
+                  onMouseLeave={() => setActivePreview(null)}
                   className="flex items-center gap-3 p-4 bg-space-black/50 hover:bg-space-black rounded-xl transition-all duration-300 group border border-gray-700/50"
                 >
                   <motion.div
@@ -83,6 +93,27 @@ export const ContactModal: FC<ContactModalProps> = ({ isOpen, onClose }) => {
                   </motion.div>
                   <span className="font-display tracking-wide text-sm">GITHUB PROFILE</span>
                 </motion.a>
+
+                {/* Preview Portal */}
+                <AnimatePresence>
+                  {activePreview && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className="absolute left-full ml-4 top-0 w-80 bg-space-black rounded-xl shadow-2xl border border-gray-700/50 overflow-hidden"
+                    >
+                      <Suspense fallback={
+                        <div className="p-4 animate-pulse">
+                          Loading preview...
+                        </div>
+                      }>
+                        {activePreview === 'linkedin' && <LinkedInPreview />}
+                        {activePreview === 'github' && <GitHubPreview />}
+                      </Suspense>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </motion.div>
