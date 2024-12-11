@@ -5,7 +5,7 @@ import Footer from '@/components/footer'
 
 const HomePage: FC = () => {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-white dark:bg-space-black">
       <Navbar />
       <Hero />
       <main className="flex-grow">

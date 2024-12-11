@@ -2,11 +2,11 @@ import { FC } from 'react';
 
 const LinkedInPreview: FC = () => {
   return (
-    <div className="p-4 space-y-3">
+    <div className="p-4 space-y-3 bg-white dark:bg-space-black">
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center">
+        <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
           <svg 
-            className="w-8 h-8 text-gray-400" 
+            className="w-8 h-8 text-gray-500 dark:text-gray-400" 
             fill="currentColor" 
             viewBox="0 0 24 24"
           >
@@ -15,8 +15,8 @@ const LinkedInPreview: FC = () => {
         </div>
         <div>
           <div className="flex items-center gap-1">
-            <h3 className="font-semibold">Sourabh Beniwal</h3>
-            <span className="text-xs text-gray-400">(He/Him)</span>
+            <h3 className="font-semibold dark:text-white">Sourabh Beniwal</h3>
+            <span className="text-xs text-gray-600 dark:text-gray-400">(He/Him)</span>
             {/* Verification Badge */}
             <svg 
               className="w-4 h-4 text-blue-400" 
@@ -30,13 +30,13 @@ const LinkedInPreview: FC = () => {
               />
             </svg>
           </div>
-          <p className="text-sm text-gray-400">Software Engineer</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Software Engineer</p>
         </div>
       </div>
-      <p className="text-sm text-gray-300 leading-relaxed">
+      <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
         Building high-performance, accessible user interfaces with modern frontend technologies, focused on delivering exceptional digital experiences through best practices in JavaScript, React, and beyond.
       </p>
-      <div className="flex gap-4 text-sm text-gray-400">
+      <div className="flex gap-4 text-sm text-gray-600 dark:text-gray-400">
         <span>500+ connections</span>
         <span>Frontend Developer</span>
       </div>

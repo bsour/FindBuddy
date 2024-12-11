@@ -7,9 +7,11 @@ interface FooterProps {
 
 const Footer: FC<FooterProps> = ({ content = defaultContent }) => {
   return (
-    <footer>
-      <div>
-        <p>{content.copyright}</p>
+    <footer className="bg-gray-100 dark:bg-space-black py-8">
+      <div className="max-w-7xl mx-auto px-6">
+        <p className="text-gray-600 dark:text-gray-400 text-center">
+          {content.copyright}
+        </p>
       </div>
     </footer>
   )
